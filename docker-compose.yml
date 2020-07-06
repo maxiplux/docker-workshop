@@ -16,7 +16,10 @@ services:
       - "docker-compose.local:127.0.1.1"
     environment:  
       VIRTUAL_HOST: docker-compose.local
-      DATABASE_URL: mysql://root:root@mysql:3308/ecommerce?serverVersion=5.7
+      DATABASE_URL: db:3306'
+      DATABASE_NAME: ecommerce
+      DATABASE_USER: ecommerce
+      DATABASE_PASS: 3c0mm3rc3
       XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9001 remote_enable=1
     networks:
       compose:
@@ -34,12 +37,26 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      #MYSQL_USER: root
+      MYSQL_USER: ecommerce
       MYSQL_DATABASE: ecommerce
-      MYSQL_PASSWORD: 3c0mm3rc3      
+      MYSQL_PASSWORD: 3c0mm3rc3
+      MYSQL_ROOT_HOST: '%'       
     networks:
       compose:
         aliases:
           - dbserver-docker-compose
+  phpmyadmin:
+    container_name: phpmyadmin-docker-compose
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8046:80
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: 3c0mm3rc3  
+    networks:
+      compose:
+        aliases:
+          - phpmyadmin-dbserver-docker-compose          
 networks: 
     compose:          
