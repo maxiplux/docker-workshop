@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  web:
+    build: './'
+    container_name: php5.4-apache2-docker-compose
+    volumes:
+      - ./app:/var/www/html/
+    ports:
+      - "8045:80"  
+    extra_hosts:
+      - "docker-compose.local:127.0.1.1"
+    environment:  
+      VIRTUAL_HOST: docker-compose.local
+      XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9001 remote_enable=1
+    networks:
+      compose:
+        aliases:
+          - webserver-docker-compose-php5.4
+
+networks: 
+    compose:          
